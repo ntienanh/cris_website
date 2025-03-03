@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Headline (Tiêu đề lớn) */
+  .headline-1 {
+    @apply text-6xl font-bold leading-tight;
+  }
+
+  .headline-2 {
+    @apply text-5xl font-semibold leading-snug;
+  }
+
+  .headline-3 {
+    @apply text-4xl font-semibold leading-normal;
+  }
+
+  .headline-4 {
+    @apply text-3xl font-medium leading-normal;
+  }
+
+  .headline-5 {
+    @apply text-2xl font-medium leading-relaxed;
+  }
+
+  .headline-6 {
+    @apply text-xl font-medium leading-loose;
+  }
+
+  /* Subtitle (Phụ đề) */
+  .subtitle-1 {
+    @apply text-lg font-medium leading-normal;
+  }
+
+  .subtitle-2 {
+    @apply text-base font-medium leading-relaxed;
+  }
+
+  /* Body (Đoạn văn bản) */
+  .body-1 {
+    @apply text-base font-normal leading-relaxed;
+  }
+
+  .body-2 {
+    @apply text-sm font-normal leading-normal;
+  }
+
+  /* Caption (Chú thích) */
+  .caption {
+    @apply text-xs font-light leading-tight;
+  }
+
+  /* Button (Nút bấm) */
+  .button {
+    @apply text-sm font-semibold uppercase tracking-wide;
+  }
+
+  /* Overline (Dòng chữ nhỏ phía trên tiêu đề) */
+  .overline {
+    @apply text-xs font-medium uppercase tracking-widest;
+  }
+}
+
+@theme {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}

@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Prettier
+prettier-plugin-organize-imports
+prettier-plugin-tailwindcss
 
-## Getting Started
+---
 
-First, run the development server:
+/\*_ @type {import('prettier').Config & import('prettier-plugin-tailwindcss').PluginOptions} _/
+const config = {
+printWidth: 120,
+tabWidth: 2,
+useTabs: false,
+semi: true,
+singleQuote: true,
+trailingComma: 'all',
+jsxSingleQuote: true,
+endOfLine: 'lf',
+arrowParens: 'avoid',
+plugins: ['prettier-plugin-organize-imports', 'prettier-plugin-tailwindcss'],
+tailwindFunctions: ['clsx'],
+tailwindAttributes: ['className', 'classNames'],
+};
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+module.exports = config;
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Eslint
+eslint-config-prettier
+eslint-plugin-prettier
+eslint-config-next
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+\*\*\*\* typoraphy
 
-## Learn More
+<h1 className='headline-1'>Headline 1</h1>
+      <h2 className='headline-2'>Headline 2</h2>
+      <h3 className='headline-3'>Headline 3</h3>
+      <h4 className='headline-4'>Headline 4</h4>
+      <h5 className='headline-5'>Headline 5</h5>
+      <h6 className='headline-6'>Headline 6</h6>
 
-To learn more about Next.js, take a look at the following resources:
+      <p className='subtitle-1'>Subtitle 1</p>
+      <p className='subtitle-2'>Subtitle 2</p>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+      <p className='body-1'>Body 1 - Văn bản chính</p>
+      <p className='body-2'>Body 2 - Văn bản phụ</p>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+      <p className='caption'>Caption - Chú thích</p>
+      <button className='button'>Button - Nút bấm</button>
+      <p className='overline'>Overline - Chữ nhỏ trên tiêu đề</p>
