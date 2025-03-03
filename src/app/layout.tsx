@@ -5,6 +5,7 @@ import { HeroProviderBase } from "@/components/providers/HeroProviderBase";
 import HeaderSection from "@/components/sections/Header";
 import Footer from "@/components/sections/Footer";
 import CTASection from "@/components/sections/CTASection";
+import { ViewTransitions } from 'next-view-transitions'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,19 +28,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <HeroProviderBase>
-          <div className="flex flex-col min-h-screen">
-            <HeaderSection />
-            <div className="flex-1 px-6 pt-6 max-w-[1615px] mx-auto w-full">{children}</div>
-            <CTASection/>
-            <Footer/>
-          </div>
-        </HeroProviderBase>
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <HeroProviderBase>
+            <div className="flex flex-col min-h-screen">
+              <HeaderSection />
+              <div className="flex-1 px-6 pt-6 max-w-[1615px] mx-auto w-full">{children}</div>
+              <CTASection/>
+              <Footer/>
+            </div>
+          </HeroProviderBase>
+        </body>
+      </html>
+    </ViewTransitions>
+
   );
 }
