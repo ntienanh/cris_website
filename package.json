@@ -9,7 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/cssinjs": "^1.23.0",
+    "@ant-design/icons": "^5.6.1",
+    "@ant-design/nextjs-registry": "^1.0.2",
     "@heroui/react": "^2.7.4",
+    "@tanstack/react-query": "^5.67.1",
+    "antd": "^5.24.2",
+    "axios": "^1.8.1",
     "eslint-config-prettier": "^10.0.2",
     "eslint-plugin-prettier": "^5.2.3",
     "framer-motion": "^12.4.7",
@@ -19,15 +25,14 @@
     "nextjs-toploader": "^3.7.15",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
     "react-icons": "^5.5.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@tanstack/eslint-plugin-query": "^5.66.1",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
     "eslint": "^9",
     "eslint-config-next": "^15.2.0",
     "tailwindcss": "^3.4.17",

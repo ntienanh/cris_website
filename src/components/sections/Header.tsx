@@ -5,26 +5,31 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { CiMenuFries } from 'react-icons/ci';
 
+export const menuNav: { href: string; label: string }[] = [
+  { href: '/about', label: 'About me' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/hooks', label: 'Hooks' },
+  { href: '/fplanner', label: 'FPlanner' },
+];
+
 const HeaderSection = () => {
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
 
-
-
   return (
     <>
       <div
         className={`fixed inset-0 z-10 transition-opacity duration-500 ease-in-out ${
           mobileSidebarOpen
-            ? 'opacity-30 bg-gray-900/30 backdrop-blur-sm pointer-events-auto'
-            : 'opacity-0 pointer-events-none'
+            ? 'pointer-events-auto bg-gray-900/30 opacity-30 backdrop-blur-sm'
+            : 'pointer-events-none opacity-0'
         }`}
         onClick={() => setMobileSidebarOpen(false)}
       />
 
-      <nav className='border-b border-gray-100 relative'>
+      <nav className='relative border-b border-gray-100'>
         <div className='relative mx-auto flex h-16 w-full max-w-[1615px] items-center justify-between px-6'>
           <img
             onClick={() => router.push('/')}
@@ -34,17 +39,10 @@ const HeaderSection = () => {
           />
 
           <ul className='hidden items-center gap-[20px] text-[1rem] text-[#424242] md:flex'>
-            {[
-              { href: '/about', label: 'About me' },
-              { href: '/projects', label: 'Projects' },
-              { href: '/hooks', label: 'Hooks' }
-            ].map(({ href, label }) => (
+            {menuNav.map(({ href, label }) => (
               <li
                 key={href}
-                className={`relative cursor-pointer capitalize transition-all duration-300 
-                  before:absolute before:bottom-[-2px] before:left-0 before:h-[2px] 
-                  before:rounded-full before:bg-[#3B9DF8] before:transition-all before:duration-300
-                  ${pathname === href ? 'text-[#3B9DF8] before:w-full' : 'before:w-0 hover:text-[#3B9DF8] hover:before:w-full'}`}
+                className={`relative cursor-pointer capitalize transition-all duration-300 before:absolute before:bottom-[-2px] before:left-0 before:h-[2px] before:rounded-full before:bg-[#3B9DF8] before:transition-all before:duration-300 ${pathname === href ? 'text-[#3B9DF8] before:w-full' : 'before:w-0 hover:text-[#3B9DF8] hover:before:w-full'}`}
               >
                 <Link href={href}>{label}</Link>
               </li>
@@ -70,24 +68,22 @@ const HeaderSection = () => {
 
             <CiMenuFries
               onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
-              className='text-[#424242] flex cursor-pointer text-[1.8rem] md:hidden'
+              className='flex cursor-pointer text-[1.8rem] text-[#424242] md:hidden'
             />
           </div>
 
           <aside
-          className={`fixed right-0 top-0 h-full w-[250px] shadow-lg p-4 transition-all duration-500 ease-in-out z-20 bg-slate-100
-          ${mobileSidebarOpen ? 'translate-x-0 opacity-100' : 'translate-x-[100%] opacity-0 pointer-events-none'}`}
-        >
-          <img
-            onClick={() => router.push('/')}
-            src='/images/Bun-logo.png'
-            alt='logo'
-            className='h-[132px] w-full cursor-pointer'
-          />
+            className={`fixed right-0 top-0 z-20 h-full w-[250px] bg-slate-100 p-4 shadow-lg transition-all duration-500 ease-in-out ${mobileSidebarOpen ? 'translate-x-0 opacity-100' : 'pointer-events-none translate-x-[100%] opacity-0'}`}
+          >
+            <img
+              onClick={() => router.push('/')}
+              src='/images/Bun-logo.png'
+              alt='logo'
+              className='h-[132px] w-full cursor-pointer'
+            />
 
-          <NavigationMenu onClick={() => setMobileSidebarOpen(false)} isCol pathname={pathname}/>
-          
-        </aside>
+            <NavigationMenu onClick={() => setMobileSidebarOpen(false)} isCol pathname={pathname} />
+          </aside>
         </div>
       </nav>
     </>
@@ -96,23 +92,19 @@ const HeaderSection = () => {
 
 export default HeaderSection;
 
-const NavigationMenu = ({ pathname ,isCol,onClick}: { pathname: string, isCol?: boolean ,onClick?: () => void}) => {
+const NavigationMenu = ({ pathname, isCol, onClick }: { pathname: string; isCol?: boolean; onClick?: () => void }) => {
   return (
-    <ul style={{
-      flexDirection: isCol ? 'column' : 'row'
-    }} className='flex items-center gap-[20px] text-[1rem] text-[#424242] md:flex'>
-      {[
-        { href: '/about', label: 'About me' },
-        { href: '/projects', label: 'Projects' },
-        { href: '/hooks', label: 'Hooks' }
-      ].map(({ href, label }) => (
+    <ul
+      style={{
+        flexDirection: isCol ? 'column' : 'row',
+      }}
+      className='flex items-center gap-[20px] text-[1rem] text-[#424242] md:flex'
+    >
+      {menuNav.map(({ href, label }) => (
         <li
-          onClick={onClick?onClick:undefined}
+          onClick={onClick ? onClick : undefined}
           key={href}
-          className={`relative cursor-pointer capitalize transition-all duration-300 
-          before:absolute before:bottom-[-2px] before:left-0 before:h-[2px] 
-          before:rounded-full before:bg-[#3B9DF8] before:transition-all before:duration-300
-          ${pathname === href ? 'text-[#3B9DF8] before:w-full' : 'before:w-0 hover:text-[#3B9DF8] hover:before:w-full'}`}
+          className={`relative cursor-pointer capitalize transition-all duration-300 before:absolute before:bottom-[-2px] before:left-0 before:h-[2px] before:rounded-full before:bg-[#3B9DF8] before:transition-all before:duration-300 ${pathname === href ? 'text-[#3B9DF8] before:w-full' : 'before:w-0 hover:text-[#3B9DF8] hover:before:w-full'}`}
         >
           <Link href={href}>{label}</Link>
         </li>
