@@ -21,7 +21,7 @@ const Banner = () => {
   };
 
   return (
-    <div className='relative mx-auto mt-auto w-full max-w-[1615px] rounded-md px-6 py-4'>
+    <section className='relative mx-auto mt-auto w-full max-w-[1615px] rounded-md px-6 py-4'>
       <Carousel
         ref={ref}
         autoplay
@@ -70,7 +70,7 @@ const Banner = () => {
       >
         <RightOutlined />
       </div>
-    </div>
+    </section>
   );
 };
 

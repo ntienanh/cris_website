@@ -37,7 +37,7 @@ const FoodPlannerPage = () => {
   const listFood = foodQuery.data?.data;
 
   useEffect(() => {
-    if (!pagination && listFood?.meta) {
+    if (listFood?.meta) {
       setPagination({
         page: listFood.meta.page,
         pageSize: listFood.meta.pageSize,
@@ -45,7 +45,16 @@ const FoodPlannerPage = () => {
         totalPages: listFood.meta.totalPages,
       });
     }
-  }, []);
+  }, [listFood]);
+
+  // Handle Pagination Change
+  const handlePaginationChange = (page: number, pageSize?: number) => {
+    setPagination(prev => ({
+      ...prev,
+      page,
+      pageSize: pageSize || prev.pageSize,
+    }));
+  };
 
   console.log('Meta', listFood?.data);
 
@@ -77,6 +86,7 @@ const FoodPlannerPage = () => {
         <div className='flex flex-col gap-4'>
           <div className='flex justify-center'>
             <Pagination
+              onChange={handlePaginationChange}
               current={pagination.page}
               total={pagination.total}
               pageSize={pagination.pageSize}
@@ -143,7 +153,7 @@ const FoodPlannerPage = () => {
   }, []);
 
   return (
-    <section className='flex flex-col gap-6 pb-12'>
+    <section className='flex flex-col gap-6 px-6 pb-12'>
       <div className='flex justify-end gap-3'>
         <Popover content={<div>List of orders</div>} title='Prompt' trigger={'hover'} placement='bottom'>
           <Button type='primary' icon={<BulbOutlined />}>
@@ -152,8 +162,8 @@ const FoodPlannerPage = () => {
         </Popover>
       </div>
 
-      <div className='flex gap-8'>
-        <div className='flex flex-[2] flex-col gap-4 rounded-2xl border p-6'>
+      <div className='flex flex-col gap-8 md:flex-row'>
+        <div className='order-2 flex flex-[2] flex-col gap-4 rounded-2xl border p-6 md:order-1'>
           <div className='flex gap-3'>
             <Button type='primary' icon={<PlusCircleFilled />} onClick={() => setOpenFood(true)}>
               Food
@@ -166,8 +176,8 @@ const FoodPlannerPage = () => {
           <Tabs defaultActiveKey='1' items={items} onChange={onChange} />
         </div>
 
-        <div className='flex h-fit flex-[3] rounded-2xl border p-6'>
-          <div className='grid h-[540px] w-full grid-cols-3 gap-4'>
+        <div className='order-1 flex h-fit flex-[3] rounded-2xl border p-6 md:order-2'>
+          <div className='grid h-[540px] w-full grid-cols-1 gap-4 md:grid-cols-3'>
             {dayOfWeek.map(day => (
               <div key={day} className='rounded-lg bg-blue-200 p-4 text-center'>
                 {day}

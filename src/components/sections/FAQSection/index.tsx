@@ -74,7 +74,7 @@ const FAQSection = () => {
   const [active, setActive] = useState<number>(11);
 
   return (
-    <div className='mx-auto w-full max-w-5xl'>
+    <section id='faq-section' className='mx-auto w-full max-w-5xl'>
       {items?.map((item, index: number) => (
         <div key={index}>
           <CustomCollapse
@@ -102,7 +102,7 @@ const FAQSection = () => {
           <Divider className='!border-zelene-yellow !my-0 !border-[0.5px] sm:border-[1.5px]' />
         </div>
       ))}
-    </div>
+    </section>
   );
 };
 
