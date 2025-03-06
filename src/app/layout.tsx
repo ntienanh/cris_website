@@ -1,7 +1,9 @@
 import AntdStyledComponentsRegistry from '@/components/providers/AntdStyledComponentsRegistry';
 import QueryClientProviderWrapper from '@/components/providers/QueryClientProviderWrapper';
+import AutoSlide from '@/components/sections/AutoSlide';
 import Banner from '@/components/sections/Banner';
 import CTASection from '@/components/sections/CTASection';
+import FAQSection from '@/components/sections/FAQSection';
 import Footer from '@/components/sections/Footer';
 import HeaderSection from '@/components/sections/Header';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
@@ -49,9 +51,11 @@ export default function RootLayout({
                       <Banner />
                     </div>
 
-                    <div className='mx-auto w-full max-w-[1615px] flex-1 px-6 pt-6'>
+                    <div className='mx-auto w-full max-w-[1615px] flex-1'>
                       <AntdRegistry>{children}</AntdRegistry>
                     </div>
+                    <FAQSection />
+                    <AutoSlide />
                     <CTASection />
                     <Footer />
                   </div>

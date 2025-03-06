@@ -37,7 +37,7 @@ const Banner = () => {
         effect='scrollx'
         className='overflow-visible'
       >
-        {listMenu.map(item => {
+        {listMenu.map((item, index) => {
           return (
             <div
               key={item.id}
