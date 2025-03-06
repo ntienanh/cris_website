@@ -2,8 +2,12 @@ import axiosClient from '@/helper/axiosClient';
 import { AxiosResponse } from 'axios';
 
 export const FoodApi = {
-  getAllFood: (): Promise<AxiosResponse<FoodResponse>> => {
-    return axiosClient.get<FoodResponse>(`/food`);
+  getAllFood: ({ pagination }: { pagination?: any }): Promise<AxiosResponse<FoodResponse>> => {
+    const condition = pagination ? `?page=${pagination.page}&pageSize=${pagination.pageSize}` : '';
+    return axiosClient.get<FoodResponse>(`/food${condition}`);
+  },
+  createFood: ({ name }: { name: string }): Promise<AxiosResponse<FoodResponse>> => {
+    return axiosClient.post<FoodResponse>('/food', { name }); // Truyền `name` vào `data` thay vì `params`
   },
 };
 
@@ -20,7 +24,7 @@ export interface IMeta {
   totalPages: number;
 }
 
-type FoodResponse = {
+export type FoodResponse = {
   data: Food[];
   meta: IMeta;
 };

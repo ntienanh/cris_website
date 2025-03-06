@@ -19,7 +19,7 @@ const HeaderSection = () => {
   const pathname = usePathname();
 
   return (
-    <>
+    <header className='fixed top-0 z-[99999] w-full bg-white/95'>
       <div
         className={`fixed inset-0 z-10 transition-opacity duration-500 ease-in-out ${
           mobileSidebarOpen
@@ -86,7 +86,7 @@ const HeaderSection = () => {
           </aside>
         </div>
       </nav>
-    </>
+    </header>
   );
 };
 

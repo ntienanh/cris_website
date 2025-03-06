@@ -1,9 +1,12 @@
 import AntdStyledComponentsRegistry from '@/components/providers/AntdStyledComponentsRegistry';
 import QueryClientProviderWrapper from '@/components/providers/QueryClientProviderWrapper';
+import Banner from '@/components/sections/Banner';
 import CTASection from '@/components/sections/CTASection';
 import Footer from '@/components/sections/Footer';
 import HeaderSection from '@/components/sections/Header';
+import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { App, ConfigProvider } from 'antd';
+import 'antd/dist/reset.css';
 import type { Metadata } from 'next';
 import { ViewTransitions } from 'next-view-transitions';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -32,25 +35,32 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <QueryClientProviderWrapper>
-        <html lang='en'>
-          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-            <AntdStyledComponentsRegistry>
+      <html lang='en'>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <AntdStyledComponentsRegistry>
+            <QueryClientProviderWrapper>
               <ConfigProvider theme={{ cssVar: true }}>
                 <App notification={{ maxCount: 1 }}>
                   <NextTopLoader color='#1677ff' showSpinner={false} />
-                  <div className='flex min-h-screen flex-col'>
+                  <div className='relative flex min-h-screen flex-col'>
                     <HeaderSection />
-                    <div className='mx-auto w-full max-w-[1615px] flex-1 px-6 pt-6'>{children}</div>
+
+                    <div className='mt-[64px]'>
+                      <Banner />
+                    </div>
+
+                    <div className='mx-auto w-full max-w-[1615px] flex-1 px-6 pt-6'>
+                      <AntdRegistry>{children}</AntdRegistry>
+                    </div>
                     <CTASection />
                     <Footer />
                   </div>
                 </App>
               </ConfigProvider>
-            </AntdStyledComponentsRegistry>
-          </body>
-        </html>
-      </QueryClientProviderWrapper>
+            </QueryClientProviderWrapper>
+          </AntdStyledComponentsRegistry>
+        </body>
+      </html>
     </ViewTransitions>
   );
 }
