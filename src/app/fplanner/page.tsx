@@ -4,7 +4,8 @@ import { FoodApi, FoodResponse } from '@/api-client/food';
 import { IngredientApi } from '@/api-client/ingredient';
 import { BulbOutlined, DeleteFilled, EditOutlined, HeartOutlined, PlusCircleFilled } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Card, Form, Input, message, Modal, notification, Pagination, Popover, Tabs, TabsProps } from 'antd';
+import { Button, Card, Form, Input, Modal, Pagination, Popover, Tabs, TabsProps } from 'antd';
+import useApp from 'antd/es/app/useApp';
 import Meta from 'antd/es/card/Meta';
 import { useForm } from 'antd/es/form/Form';
 import FormItem from 'antd/es/form/FormItem';
@@ -14,16 +15,25 @@ import React, { useEffect } from 'react';
 const dayOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
 const FoodPlannerPage = () => {
+  const { notification } = useApp();
   const queryClient = useQueryClient();
   const [openFood, setOpenFood] = React.useState(false);
   const [openIngredient, setOpenIngredient] = React.useState(false);
   const [foodForm] = useForm();
+  const [ingredientFrom] = useForm();
   const [pagination, setPagination] = React.useState<{
     total: number;
     page: number;
     pageSize: number;
     totalPages: number;
-  }>({ total: 0, page: 1, pageSize: 5, totalPages: 1 });
+  }>({ total: 0, page: 1, pageSize: 10, totalPages: 0 });
+
+  const [paginationIngredient, setPaginationIngredient] = React.useState<{
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
+  }>({ total: 0, page: 1, pageSize: 10, totalPages: 0 });
 
   const onChange = (key: string) => {
     console.log(key);
@@ -56,35 +66,71 @@ const FoodPlannerPage = () => {
     }));
   };
 
-  console.log('Meta', listFood?.data);
-
   const createFoodMutation = useMutation<AxiosResponse<FoodResponse>, Error, { name: string }>({
     mutationFn: FoodApi.createFood,
     onSuccess: ({ data }) => {
       queryClient.invalidateQueries({ queryKey: ['food'] });
       notification.success({ message: 'Food', description: 'Create Successfully' });
       setOpenFood(false);
+      foodForm.resetFields();
     },
 
     onError: (err: any) => {
       notification.error({ message: 'Food', description: 'Create Failed' });
+      foodForm.resetFields();
     },
   });
 
   // ingredientsQuery
   const ingredientsQuery = useQuery({
-    queryKey: ['ingredient'],
-    queryFn: IngredientApi.getAllIngredients,
+    queryKey: ['ingredient', paginationIngredient.page, paginationIngredient.pageSize],
+    queryFn: () => IngredientApi.getAllIngredients({ pagination: paginationIngredient }),
   });
   const listIngredients = ingredientsQuery.data?.data;
+
+  const createIngredientMutation = useMutation<AxiosResponse<FoodResponse>, Error, { name: string }>({
+    mutationFn: IngredientApi.createFood,
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries({ queryKey: ['ingredient'] });
+      notification.success({ message: 'Ingredient', description: 'Create Successfully' });
+      setOpenIngredient(false);
+      ingredientFrom.resetFields();
+    },
+
+    onError: (err: any) => {
+      notification.error({ message: 'Ingredient', description: 'Create Failed' });
+      setOpenIngredient(false);
+      ingredientFrom.resetFields();
+    },
+  });
+
+  useEffect(() => {
+    if (listIngredients?.meta) {
+      setPaginationIngredient({
+        page: listIngredients.meta.page,
+        pageSize: listIngredients.meta.pageSize,
+        total: listIngredients.meta.total,
+        totalPages: listIngredients.meta.totalPages,
+      });
+    }
+  }, [listIngredients]);
+
+  // Handle Pagination Change
+  const handlePaginationIngredientChange = (page: number, pageSize?: number) => {
+    setPaginationIngredient(prev => ({
+      ...prev,
+      page,
+      pageSize: pageSize || prev.pageSize,
+    }));
+  };
 
   const items: TabsProps['items'] = [
     {
       key: '1',
-      label: `Foods (${listFood?.data?.length})`,
+      label: `Foods (${listFood?.data?.length || 0})`,
       children: (
         <div className='flex flex-col gap-4'>
-          <div className='flex justify-center'>
+          <div className='flex justify-end'>
             <Pagination
               onChange={handlePaginationChange}
               current={pagination.page}
@@ -115,11 +161,18 @@ const FoodPlannerPage = () => {
     },
     {
       key: '2',
-      label: `Ingredients (${listFood?.data?.length})`,
+      label: `Ingredients (${listIngredients?.data?.length || 0})`,
       children: (
         <div className='flex flex-col gap-4'>
-          <div className='flex justify-center'>
-            <Pagination defaultCurrent={1} total={50} />
+          <div className='flex justify-end'>
+            <Pagination
+              onChange={handlePaginationIngredientChange}
+              current={paginationIngredient.page}
+              total={paginationIngredient.total}
+              pageSize={paginationIngredient.pageSize}
+              showSizeChanger
+              showTotal={total => `Total ${total} items`}
+            />
           </div>
 
           <div className='grid flex-1 grid-cols-2 gap-4'>
@@ -143,14 +196,14 @@ const FoodPlannerPage = () => {
   ];
 
   const form1Submit = (val: any) => {
-    message.success('Success');
     if (!val) return;
     createFoodMutation.mutate({ name: val.name });
   };
 
-  useEffect(() => {
-    message.success('Welcome!');
-  }, []);
+  const form2Submit = (val: any) => {
+    if (!val) return;
+    createIngredientMutation.mutate({ name: val.name });
+  };
 
   return (
     <section className='flex flex-col gap-6 px-6 pb-12'>
@@ -224,7 +277,22 @@ const FoodPlannerPage = () => {
           onCancel={() => setOpenIngredient(false)}
           footer={[]}
         >
-          123
+          <Form layout='vertical' form={ingredientFrom} onFinish={form2Submit}>
+            <FormItem
+              label='Name'
+              name='name'
+              required
+              rules={[{ required: true, message: 'Please input name of your food!' }]}
+            >
+              <Input placeholder='Enter name of your food!' />
+            </FormItem>
+
+            <div className='flex justify-end'>
+              <Button htmlType='submit' type='primary'>
+                Submit
+              </Button>
+            </div>
+          </Form>
         </Modal>
       </>
     </section>

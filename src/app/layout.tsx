@@ -8,7 +8,6 @@ import Footer from '@/components/sections/Footer';
 import HeaderSection from '@/components/sections/Header';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { App, ConfigProvider } from 'antd';
-import 'antd/dist/reset.css';
 import type { Metadata } from 'next';
 import { ViewTransitions } from 'next-view-transitions';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -42,24 +41,27 @@ export default function RootLayout({
           <AntdStyledComponentsRegistry>
             <QueryClientProviderWrapper>
               <ConfigProvider theme={{ cssVar: true }}>
-                <App notification={{ maxCount: 1 }}>
-                  <NextTopLoader color='#1677ff' showSpinner={false} />
-                  <div className='relative flex min-h-screen flex-col'>
-                    <HeaderSection />
+                <NextTopLoader color='#1677ff' showSpinner={false} />
+                <div className='relative flex min-h-screen flex-col'>
+                  <HeaderSection />
 
-                    <div className='mt-[64px]'>
-                      <Banner />
-                    </div>
+                  <div className='mt-[64px]'>
+                    <Banner />
+                  </div>
 
-                    <div className='mx-auto w-full max-w-[1615px] flex-1'>
-                      <AntdRegistry>{children}</AntdRegistry>
-                    </div>
+                  <div className='mx-auto w-full max-w-[1615px] flex-1'>
+                    <AntdRegistry>
+                      <App notification={{ maxCount: 1 }}>{children}</App>
+                    </AntdRegistry>
+                  </div>
+
+                  <div className='flex flex-col gap-8'>
                     <FAQSection />
                     <AutoSlide />
                     <CTASection />
-                    <Footer />
                   </div>
-                </App>
+                  <Footer />
+                </div>
               </ConfigProvider>
             </QueryClientProviderWrapper>
           </AntdStyledComponentsRegistry>

@@ -92,3 +92,13 @@ html {
 html::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
+
+.ant-message {
+  display: block !important;
+  z-index: 99999 !important;
+}
+
+.ant-notification {
+  display: block !important;
+  z-index: 99999 !important;
+}
