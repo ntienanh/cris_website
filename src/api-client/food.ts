@@ -1,4 +1,5 @@
 import axiosClient from '@/helper/axiosClient';
+import { FoodResponse } from '@/interface/food';
 import { AxiosResponse } from 'axios';
 
 export const FoodApi = {
@@ -9,22 +10,4 @@ export const FoodApi = {
   createFood: ({ name }: { name: string }): Promise<AxiosResponse<FoodResponse>> => {
     return axiosClient.post<FoodResponse>('/food', { name }); // Truyền `name` vào `data` thay vì `params`
   },
-};
-
-// TS
-type Food = {
-  id: number;
-  name: string;
-};
-
-export interface IMeta {
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-}
-
-export type FoodResponse = {
-  data: Food[];
-  meta: IMeta;
 };

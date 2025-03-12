@@ -1,10 +1,11 @@
 'use client';
 
-import { FoodApi, FoodResponse } from '@/api-client/food';
+import { FoodApi } from '@/api-client/food';
 import { IngredientApi } from '@/api-client/ingredient';
+import { FoodResponse } from '@/interface/food';
 import { BulbOutlined, DeleteFilled, EditOutlined, HeartOutlined, PlusCircleFilled } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Card, Form, Input, Modal, Pagination, Popover, Tabs, TabsProps } from 'antd';
+import { Button, Card, Form, Input, Modal, Pagination, Popover, Skeleton, Tabs, TabsProps } from 'antd';
 import useApp from 'antd/es/app/useApp';
 import Meta from 'antd/es/card/Meta';
 import { useForm } from 'antd/es/form/Form';
@@ -130,16 +131,20 @@ const FoodPlannerPage = () => {
       label: `Foods (${listFood?.data?.length || 0})`,
       children: (
         <div className='flex flex-col gap-4'>
-          <div className='flex justify-end'>
-            <Pagination
-              onChange={handlePaginationChange}
-              current={pagination.page}
-              total={pagination.total}
-              pageSize={pagination.pageSize}
-              showSizeChanger
-              showTotal={total => `Total ${total} items`}
-            />
-          </div>
+          {foodQuery.isLoading ? (
+            <PaginationSkeleton />
+          ) : (
+            <div className='flex justify-end'>
+              <Pagination
+                onChange={handlePaginationChange}
+                current={pagination.page}
+                total={pagination.total}
+                pageSize={pagination.pageSize}
+                showSizeChanger
+                showTotal={total => `Total ${total} items`}
+              />
+            </div>
+          )}
 
           <div className='grid flex-1 grid-cols-2 gap-4'>
             {listFood?.data.map(food => (
@@ -300,3 +305,20 @@ const FoodPlannerPage = () => {
 };
 
 export default FoodPlannerPage;
+
+const PaginationSkeleton = () => {
+  return (
+    <div className='flex justify-end'>
+      <div className='flex w-[300px] items-center gap-2'>
+        {/* Skeleton cho phần showTotal */}
+        <Skeleton className='h-8' active paragraph={{ rows: 0 }} title={{ width: 100 }} />
+
+        {/* Skeleton cho các nút pagination */}
+        <Skeleton className='h-8' active paragraph={{ rows: 0 }} title={{ width: 150 }} />
+
+        {/* Skeleton cho phần showSizeChanger */}
+        <Skeleton className='h-8' active paragraph={{ rows: 0 }} title={{ width: 50 }} />
+      </div>
+    </div>
+  );
+};
