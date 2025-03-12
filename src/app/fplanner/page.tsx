@@ -2,7 +2,7 @@
 
 import { FoodApi } from '@/api-client/food';
 import { IngredientApi } from '@/api-client/ingredient';
-import { FoodResponse } from '@/interface/food';
+import { IFoodResponse } from '@/interface/food';
 import { BulbOutlined, DeleteFilled, EditOutlined, HeartOutlined, PlusCircleFilled } from '@ant-design/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Card, Form, Input, Modal, Pagination, Popover, Skeleton, Tabs, TabsProps } from 'antd';
@@ -12,6 +12,7 @@ import { useForm } from 'antd/es/form/Form';
 import FormItem from 'antd/es/form/FormItem';
 import { AxiosResponse } from 'axios';
 import React, { useEffect } from 'react';
+import FoodModal from './_component/FoodModal';
 
 const dayOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -67,7 +68,11 @@ const FoodPlannerPage = () => {
     }));
   };
 
-  const createFoodMutation = useMutation<AxiosResponse<FoodResponse>, Error, { name: string }>({
+  const createFoodMutation = useMutation<
+    AxiosResponse<IFoodResponse>,
+    Error,
+    { name: string; image: any; minCalories: number; maxCalories: number; description: string }
+  >({
     mutationFn: FoodApi.createFood,
     onSuccess: ({ data }) => {
       queryClient.invalidateQueries({ queryKey: ['food'] });
@@ -89,7 +94,7 @@ const FoodPlannerPage = () => {
   });
   const listIngredients = ingredientsQuery.data?.data;
 
-  const createIngredientMutation = useMutation<AxiosResponse<FoodResponse>, Error, { name: string }>({
+  const createIngredientMutation = useMutation<AxiosResponse<IFoodResponse>, Error, { name: string }>({
     mutationFn: IngredientApi.createFood,
     onSuccess: ({ data }) => {
       queryClient.invalidateQueries({ queryKey: ['ingredient'] });
@@ -202,7 +207,7 @@ const FoodPlannerPage = () => {
 
   const form1Submit = (val: any) => {
     if (!val) return;
-    createFoodMutation.mutate({ name: val.name });
+    createFoodMutation.mutate({ ...val });
   };
 
   const form2Submit = (val: any) => {
@@ -247,33 +252,13 @@ const FoodPlannerPage = () => {
 
       {/* Modal */}
       <>
-        <Modal
-          title='Create Food'
-          centered
-          open={openFood}
-          footer={null}
-          onCancel={() => {
-            setOpenFood(false);
-            foodForm.resetFields();
-          }}
-        >
-          <Form layout='vertical' form={foodForm} onFinish={form1Submit}>
-            <FormItem
-              label='Name'
-              name='name'
-              required
-              rules={[{ required: true, message: 'Please input name of your food!' }]}
-            >
-              <Input placeholder='Enter name of your food!' />
-            </FormItem>
-
-            <div className='flex justify-end'>
-              <Button htmlType='submit' type='primary'>
-                Submit
-              </Button>
-            </div>
-          </Form>
-        </Modal>
+        <FoodModal
+          loading={createFoodMutation.isPending}
+          foodForm={foodForm}
+          onFinish={form1Submit}
+          openFood={openFood}
+          setOpenFood={setOpenFood}
+        />
 
         <Modal
           title='Create Ingredient'
